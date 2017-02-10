@@ -12,11 +12,9 @@
 #include <ctype.h>
 #include "load.h"
 
-#define MAXUSER 1000
+#define MAXUSER 256
 #define MAXTEXT 50
 #define N 256
-
-
 
 
 char** dividedDataCourses(char* dataArray){
@@ -52,11 +50,6 @@ char** dividedDataCourses(char* dataArray){
     
 }
 
-
-
-
-
-
 char** getData(char** dataArray, char target[]){
     
     int j = 0, i = 0;
@@ -79,7 +72,6 @@ char** getData(char** dataArray, char target[]){
     return array;
     
 }
-
 
 
 char* substring(char* word, int raw){
@@ -122,7 +114,6 @@ char* substring(char* word, int raw){
 }
 
 
-
 char** loadFile(char file_name[]){
     
     FILE *fp;
@@ -140,10 +131,9 @@ char** loadFile(char file_name[]){
     while( fgets( s, N, fp ) != NULL ){ // get a each line, loop until null
         if(*s != '\n'){ // no need space
             trim(s); //trim empty space
-            dataArray[i] = (char *) malloc(sizeof(char *) * N);
+            int len = strlength(s);
+            dataArray[i] = (char *) malloc(sizeof(char *) * len+1);
             strcpy(dataArray[i], s); // assign to
-            int len = strlength(dataArray[i]);
-            dataArray[i] = (char *) realloc(dataArray[i], sizeof(char *) * len+1);
             dataArray[i][len+1] = '\0';
             i++;
         }
@@ -152,7 +142,6 @@ char** loadFile(char file_name[]){
     fclose( fp );
     return dataArray;
 }
-
 
 
 void trim(char *s) {
@@ -172,3 +161,60 @@ int strlength(char* line){
     return len;
 }
 
+int getArrayLength(char** dataArray){
+    int num = 0;
+    while (dataArray[num] != NULL) {
+        num++;
+    }
+    return num;
+}
+
+int getArrayLen(char** dataArray){
+    int size = sizeof dataArray / sizeof dataArray[0];
+    return size;
+}
+
+void bubbleSort(float* allGPAArray, int arrayLen){
+    
+    float tmp;
+    for (int i = 0; i < arrayLen; i++) {
+        for (int j = arrayLen; j > i; j--) {
+            if (allGPAArray[j - 1] < allGPAArray[j]) {
+                tmp = allGPAArray[j];
+                allGPAArray[j] = allGPAArray[j - 1];
+                allGPAArray[j - 1] = tmp;
+            }
+        }
+    }
+    
+}
+
+char* convertFirstCapital(char* word){
+    char* tmp = NULL;
+    int num = (int)strlen(word);
+    tmp = malloc(num + 1);
+    for( int i = 0; i <= num; i++){
+        if(i == 0){
+            tmp[i] = toupper( word[i] );
+        }else{
+            tmp[i] = word[i];
+        }
+    }
+    return tmp;
+}
+
+unsigned GetDigit(unsigned num){
+    unsigned digit = 0;
+    while( num != 0 ){
+        num /= 10;
+        digit++;
+    }
+    return digit;
+}
+
+void delay(int x){
+   	int c = 1, d = 1;
+    for ( c = 1 ; c <= x ; c++ )
+        for ( d = 1 ; d <= 200000 ; d++ )
+        {}
+}
