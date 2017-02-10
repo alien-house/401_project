@@ -48,7 +48,6 @@ void showPrintMyTranscript( void );
 void showPrintAllStudents( void );
 void showPrintAllCourses( void );
 void stageRanking( void );
-//char** getCourseName( char** courseID, int courseTotalNum );
 char** getCourseName( char** courseID, int courseTotalNum, int transcript );
 void bubbleSort(float* allGPAArray, int arrayLen);
 
@@ -88,7 +87,6 @@ int stuCourseMaxNum = 0;
 char* GenderTitle;
 char* GenderFirstPerson;
 
-//int indexStudentStruct = 0;
 float myGpa = 0.0;
 int numCourses = 0;
 
@@ -97,19 +95,13 @@ int main( int argc, const char * argv[] ) {
     
     char file_account[] = FILE_ACCOUNT;
     char file_course[] = FILE_COURSE;
-    char* file_student = FILE_STUDENT;
+    char file_student[] = FILE_STUDENT;
     char file_studentscourses[] = FILE_STUCOURSE;
     
     Account       = (struct account*) malloc(sizeof(struct account) * MAXUSER);
     Course        = (struct course*) malloc(sizeof(struct course) * MAXUSER);
     Student       = (struct student*) malloc(sizeof(struct student) * MAXUSER);
     StudentCourse = (struct studentcourse*) malloc(sizeof(struct studentcourse) * MAXUSER);
-    
-    // 構造体の配列の変数を入れた配列を渡して、その関数内で代入したかったな。
-    //    char* strctArray[4] = { &Account, &Course, &Student, &StudentCourse};
-    //    Course[0].studentID = "12345";
-    //    printf("%s \n", Course[0].studentID );
-    //    printf("%s \n", *(strctArray[1])[0].studentID );
     
     makeAccountStructure(file_account);
     makeCourseStructure(file_course);
@@ -189,7 +181,7 @@ void enterLogin( void ){
 void mainMenu(){
     int repeater = 0;
     int opt;
-    while(repeater==0){
+    while(repeater == 0){
         printf("******************************************\n");
         printf("Select from the options:\n");
         printf("******************************************\n");
@@ -268,7 +260,7 @@ void mainMenu(){
         }
     }
     
-    if (repeater==1){
+    if (repeater == 1){
         delay(3000);
         showLoginView();
     }
@@ -340,7 +332,6 @@ void showPrintMyCourse(int myStudentID){
     char** courseName;
     courseName = getCourseName(Student[myStuStrNum].courses, Student[myStuStrNum].courses_num, 0);
     int nums = getArrayLength(courseName);
-//    printf("%d\n",nums);
     for (int i = 0; i < nums; i++) {
         printf("%d) %s \n", i+1, courseName[i]);
     }
@@ -401,14 +392,9 @@ char** getCourseName( char** courseID, int courseTotalNum, int transcript ){
 
         //If there is no name
         if(noname == 1){
-//            printf("no:%s \n", courseID[a]);
             noname = 0;
             int idlen = strlength(courseID[a]);
             courseNameID[num] = (char *) malloc(sizeof(char *) * (idlen+14+1));// for [: \0]
-//            if(transcript == 0){
-//            }else{
-//                courseNameID[num] = (char *) malloc(sizeof(char *) * (idlen+14+3+marklen+2));
-//            }
             courseName = "NO COURSE NAME";
         }
         
@@ -533,18 +519,12 @@ char* convertFirstCapital(char* word){
 
 void makeAccountStructure( char file_name[] ){
     
-    char** dataArray;
-    int dataLen = 0;
-    
-    dataArray = loadFile(file_name);
-    
+    char** dataArray = loadFile(file_name);
     char** arrayUser = getData(dataArray, "User");
-    dataLen = getArrayLength(arrayUser);
-    
+    accountMaxNum = getArrayLength(arrayUser);
     char** arrayPass = getData(dataArray, "Pass");
-    accountMaxNum = dataLen;
     
-    for (int i = 0; i < dataLen; i++) {
+    for (int i = 0; i < accountMaxNum; i++) {
         Account[i].user = atoi(arrayUser[i]);
         Account[i].pass = arrayPass[i];
     }
@@ -605,6 +585,7 @@ void makeStudentStructure( char file_name[] ){
     
     
 }
+
 
 void makeStuCourseStructure( char file_name[] ){
     

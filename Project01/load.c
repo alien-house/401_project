@@ -63,46 +63,22 @@ char** getData(char** dataArray, char target[]){
     char** array;
     
     array = (char **) malloc(sizeof(char **) * N);
-    while (dataArray[j] != NULL) { // each line
+    while (dataArray[j] != NULL) {
         if((strstr(dataArray[j], target)) != NULL ){
-//            array[i] = (char *) malloc(sizeof(char *) * N);
             
             if( strcmp(target, "courses") == 0){
                 array[i] = substring(dataArray[j], 1);
             }else{
                 array[i] = substring(dataArray[j], 0);
             }
-//            array[i] = (char *) realloc(array[i], sizeof(char *) * (strlength(array[i])));
-//                        printf("%s \n", array[i]);
-//            printf("strlength(array[i])%d \n", strlength(array[i]));
             i++;
         }
         j++;
     }
-//    printf("%s:%d \n",target,i);
     array = (char **) realloc(array, sizeof(char **) * i);
     return array;
     
 }
-
-
-//
-int checkWordsComma(char* word){
-    size_t len = strlen(word);
-    int num = 0;
-    for (int i = 0; i < len; i++) {
-        if( word[i] == '\235' ){
-            if(word[i+1] == ','){
-                num++;
-            }
-        }
-    }
-    return num+1;
-}
-
-
-
-
 
 
 
@@ -161,9 +137,7 @@ char** loadFile(char file_name[]){
     }
     
     dataArray = (char **) malloc(sizeof(char **) * N);
-    
     while( fgets( s, N, fp ) != NULL ){ // get a each line, loop until null
-        
         if(*s != '\n'){ // no need space
             trim(s); //trim empty space
             dataArray[i] = (char *) malloc(sizeof(char *) * N);
@@ -176,7 +150,6 @@ char** loadFile(char file_name[]){
     }
     
     fclose( fp );
-    
     return dataArray;
 }
 
