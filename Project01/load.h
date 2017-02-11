@@ -8,22 +8,20 @@
 
 #ifndef load_h
 #define load_h
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "utility.h"
 
-char** readFile( char file_name[], char target[]);
-void trim( char *s );
+#define MAXUSER 256
+#define MAXTEXT 50
+#define N 256
 
-char* substring(char* word, int raw);
-char** loadFile( char file_name[] );
-char** getData(char** dataArray, char target[]);
+char ** readFile(char file_name[], char target[]);
+char * substring(char * word, int raw);
+char ** loadFile(char file_name[], int * num);
+char ** getData(char ** dataArray, char target[]);
+char ** dividedDataCourses(char * dataArray, int * courseNum);
 
-int strlength(char* line);
-unsigned GetDigit( unsigned num );
 
-int getArrayLength( char** dataArray );
-int getArrayLen( char** dataArray );
-void bubbleSort(float* allGPAArray, int arrayLen);
-char** dividedDataCourses(char* dataArray);
-
-char* convertFirstCapital(char* word);
-void delay();
 #endif /* load_h */
