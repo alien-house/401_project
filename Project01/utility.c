@@ -89,7 +89,7 @@ int delay(unsigned long x) {
     clock_t  c;
     
     do {
-        if ((c = clock()) == (clock_t)-1)       /* エラー */
+        if ((c = clock()) == (clock_t)-1) 
             return (0);
     } while (1000UL * (c - s) / CLOCKS_PER_SEC <= x);
     return (1);

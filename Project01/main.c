@@ -245,20 +245,6 @@ void makeStuCourseStructure(char file_name[]) {
 /* LOGIN                                  */
 /* ====================================== */
 void showLoginView(void) {
-    
-    //just try ======================= delete later
-    //    myStudentID = 7813007;
-    ////    myGpa = calculateGPA(myStudentID);
-    ////    stageRanking();
-    //    myStuStrIndex = 0;
-    ////    showPrintMyCourse(myStudentID);
-    //    showPrintMyTranscript();
-    //    showPrintAllStudents();
-    // ======================= delete later
-    //    myStudentID = 7813008;
-    //    myStuStrIndex = 1;
-    //    showPrintMyCourse(myStudentID);
-    
     printf("************************************************************\n");
     printf("Please enter your account to login:\n");
     printf("************************************************************\n");
@@ -337,23 +323,23 @@ void mainMenu() {
         scanf("%d", &opt);
         
         switch (opt) {
-            case 1:
+            case 1: // my enrollment certificate
                 if (noInfo == 1)
                     printf("You are not enrolled in any classes in CICCC\n\n");
                 else
                     printf("Dear Sir/Madam,\n\nThis is to certify that %s. %s with student id %d is a student at grade %d at CICCC. %s was admited to our college in %hd and has taken %d course(s). Currently %s resides at %s\n\n",
-                       GenderTitle,
-                       Student[myStuStrIndex].name,
-                       myStudentID, Student[myStuStrIndex].grade,
-                       convertFirstCapital(GenderFirstPerson),
-                       Student[myStuStrIndex].admission_year,
-                       Student[myStuStrIndex].courses_num,
-                       GenderFirstPerson,
-                       Student[myStuStrIndex].address);
+                           GenderTitle,
+                           Student[myStuStrIndex].name,
+                           myStudentID, Student[myStuStrIndex].grade,
+                           convertFirstCapital(GenderFirstPerson),
+                           Student[myStuStrIndex].admission_year,
+                           Student[myStuStrIndex].courses_num,
+                           GenderFirstPerson,
+                           Student[myStuStrIndex].address);
                 printf("If you have any questions, please do not hesitate to contact us.\n\n");
                 delay(2000);
                 break;
-            case 2:
+            case 2: // my courses
                 if (noInfo == 1)
                     printf("You are not enrolled in any classes in CICCC\n\n");
                 else{
@@ -362,7 +348,7 @@ void mainMenu() {
                 }
                 delay(2000);
                 break;
-            case 3:
+            case 3: // my transcript
                 if (noInfo == 1)
                     printf("You are not enrolled in any classes in CICCC\n\n");
                 else{
@@ -373,7 +359,7 @@ void mainMenu() {
                 }
                 delay(2000);
                 break;
-            case 4:
+            case 4: // my GPA
                 if (noInfo == 1)
                     printf("You are not enrolled in any classes in CICCC\n\n");
                 else{
@@ -382,7 +368,7 @@ void mainMenu() {
                 }
                 delay(2000);
                 break;
-            case 5:
+            case 5: // my ranking
                 if (noInfo == 1)
                     printf("You are not enrolled in any classes in CICCC\n\n");
                 else{
@@ -392,12 +378,12 @@ void mainMenu() {
                 }
                 delay(2000);
                 break;
-            case 6:
+            case 6: // all courses
                 printf("The following courses are offered in CICCC:\n");
                 showPrintAllCourses();
                 delay(2000);
                 break;
-            case 7:
+            case 7: // all students
                 printf("There are %d students in CICCC as following:\n", studentMaxNum);
                 showPrintAllStudents();
                 delay(2000);
@@ -405,7 +391,7 @@ void mainMenu() {
             case 8:
                 printf("Logging out...\n");
                 resetData();
-                delay(3000);
+                delay(2000);
                 repeater = 1;
                 break;
             case 9:
@@ -428,7 +414,6 @@ void mainMenu() {
     }
 }
 
-
 void resetData(void) {
     myStudentID       = 0;
     myStuStrIndex       = 0;
@@ -441,7 +426,7 @@ void resetData(void) {
 
 
 /* ====================================== */
-/* OPTION 2                               */
+/* [OPTION 2] Print my courses            */
 /* ====================================== */
 void showPrintMyCourse(void) {
     char ** courseName;
@@ -456,7 +441,7 @@ void showPrintMyCourse(void) {
 }
 
 /* ====================================== */
-/* OPTION 3                               */
+/* [OPTION 3] Print my transcript         */
 /* ====================================== */
 void showPrintMyTranscript(void) {
     char ** courseName;
@@ -470,7 +455,7 @@ void showPrintMyTranscript(void) {
 }
 
 /* ====================================== */
-/* OPTION 5                               */
+/* [OPTION 5] Print my ranking            */
 /* ====================================== */
 void stageRanking(void) {
     float * allGPAArray = calculateAllGPA();
@@ -502,16 +487,16 @@ float * calculateAllGPA() {
                 temIndex++;
             }
         }
-        temIndex = temIndex;
+        temIndex     = temIndex;
         markArray[i] = temNum / temIndex;
-        temNum = 0;
-        temIndex = 0;
+        temNum       = 0;
+        temIndex     = 0;
     }
     return markArray;
 }
 
 /* ====================================== */
-/* OPTION 6                               */
+/* [OPTION 6] List of all courses         */
 /* ====================================== */
 void showPrintAllStudents(void) {
     for (int i = 0; i < studentMaxNum; i++) {
@@ -521,7 +506,7 @@ void showPrintAllStudents(void) {
 }
 
 /* ====================================== */
-/* OPTION 7                               */
+/* [OPTION 7] List of all students        */
 /* ====================================== */
 void showPrintAllCourses(void) {
     for (int i = 0; i < courseMaxNum; i++) {
@@ -532,34 +517,29 @@ void showPrintAllCourses(void) {
 
 
 /* ====================================== */
-/* Get Course Name They are taking
+/* Get course name User is taking
  transcript = 0 : just name,
  transcript = 1 : showing mark    */
 /* ====================================== */
 char ** getCourseName(char ** courseID, int courseTotalNum, int transcript) {
     char ** courseNameID;
     char * courseName;
-    int num = 0;
+    int num      = 0;
     courseNameID = (char ** ) malloc(sizeof(char * ) * courseTotalNum);
     
-    //自分が受けているコースを参照し [courseTotalNum]:自分が受けているコース数
+    // refer my courses,
     int noname = 0, marklen = 0;
     for (int a = 0; a < courseTotalNum; a++) {
         int idlen = 0, namelen = 0;
         // get course name from all info of course
         for (int i = 0; i < courseMaxNum; i++) {
             
-            //            printf("%s \n", courseID[a]);
-            //            printf("%s \n", Course[i].courseID);
-            
             if (strcmp(courseID[a], Course[i].courseID) == 0) {
-                idlen = strlength(courseID[a]); // courseID of text length
-                namelen = strlength(Course[i].name); //course name of text length
-                courseNameID[num] = (char * ) malloc(sizeof(char) * (idlen + namelen + 2)); // for [:]
-                //                printf("%d:%s\n",namelen,Course[i].name);
-                courseName = Course[i].name;
-                
-                noname = 0;
+                idlen             = strlength(courseID[a]);// courseID of text length
+                namelen           = strlength(Course[i].name);//course name of text length
+                courseNameID[num] = (char * ) malloc(sizeof(char) * (idlen + namelen + 2));// for [:]
+                courseName        = Course[i].name;
+                noname            = 0;
                 break; // if exist, escape
             } else {
                 noname = 1; // if no found, checked
@@ -569,9 +549,9 @@ char ** getCourseName(char ** courseID, int courseTotalNum, int transcript) {
         
         //If there is no name
         if (noname == 1) {
-            noname = 0;
-            int idlen = strlength(courseID[a]);
-            courseNameID[num] = (char * ) malloc(sizeof(char * ) * (idlen + 14)); // for [:]
+            noname            = 0;
+            int idlen         = strlength(courseID[a]);
+            courseNameID[num] = (char * ) malloc(sizeof(char * ) * (idlen + 14));// for [:]
             courseName = "NO COURSE NAME";
         }
         
@@ -589,12 +569,10 @@ char ** getCourseName(char ** courseID, int courseTotalNum, int transcript) {
                 // only this user, and moreover if there is no info in Course Structure, exclude it
                 if ((myStudentID == StudentCourse[l].studentID) &&
                     (strcmp(courseID[a], StudentCourse[l].courseID) == 0)) {
-                    marklen = GetDigit(StudentCourse[l].mark); // get digit of mark
-                    
+                    marklen           = GetDigit(StudentCourse[l].mark);// get digit of mark
                     courseNameID[num] = (char * ) realloc(courseNameID[num], sizeof(char * ) * (idlen + namelen + 3 + marklen + 2));
-                    
                     strcat(courseNameID[num], ": ");
-                    int markNum = StudentCourse[l].mark;
+                    int markNum       = StudentCourse[l].mark;
                     char markEn[marklen];
                     sprintf(markEn, "%d", markNum);
                     strcat(courseNameID[num], markEn);
@@ -611,7 +589,24 @@ char ** getCourseName(char ** courseID, int courseTotalNum, int transcript) {
     
 }
 
+/* ====================================== */
+/* Calculat GPA                           */
+/* (can be modified for other students)   */
+/* ====================================== */
+float calculateGPA(int myStudentID) {
+    
+    for (int i = 0; i < stuCourseMaxNum; i++) {
+        if (myStudentID == StudentCourse[i].studentID) {
+            myGpa = myGpa + StudentCourse[i].mark;
+            numCourses++;
+        }
+    }
+    return myGpa / numCourses;
+}
 
+/* ====================================== */
+/* Get an index in Student Structure      */
+/* ====================================== */
 int getStuStrIndex(int studentID) {
     int result = 0;
     for (int i = 0; i < studentMaxNum; i++) {
@@ -626,20 +621,9 @@ int getStuStrIndex(int studentID) {
     return result;
 }
 
-
-float calculateGPA(int myStudentID) {
-    
-    for (int i = 0; i < stuCourseMaxNum; i++) {
-        if (myStudentID == StudentCourse[i].studentID) {
-            myGpa = myGpa + StudentCourse[i].mark;
-            numCourses++;
-        }
-    }
-    return myGpa / numCourses;
-}
-
-
-
+/* ====================================== */
+/* Get a gender title                     */
+/* ====================================== */
 void getGender(char * sex) {
     
     if (strcmp(sex, "male") == 0) {
