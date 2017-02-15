@@ -1,21 +1,16 @@
 courseID:"MADP101"
 name:"Objective-C"
-
-courseID:"MADP301"
+courseID:"MADP102"
 name:"Project Management"
-
-courseID:"MADP402"
-name:"Android Programming"
-
 courseID:"MADP201"
-name:"Web Development for Mobile Devices"
-
-courseID:"MADP103"
-name:"Rich Media Development"
-
+name:"Android Programming"
 courseID:"MADP202"
-name:"Java Development"
-
+name:"Java Programming"
+courseID:"MADP301"
+name:"C++ Programming"
+courseID:"MADP302"
+name:"Project Management"
 courseID:"MADP401"
-name:"C Objective C an Swift"
-
+name:"UI-UX design"
+courseID:"MADP402"
+name:"Linux Programming"

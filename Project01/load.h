@@ -14,7 +14,6 @@
 #include "utility.h"
 
 #define MAXUSER 256
-#define MAXTEXT 50
 #define N 256
 
 char ** readFile(char file_name[], char target[]);

@@ -22,7 +22,6 @@ unsigned GetDigit(unsigned num);
 char * convertFirstCapital(char * word);
 void trim(char * s);
 void bubbleSort(float * allGPAArray, int arrayLen);
-//void delay(int x);
-int delay(unsigned long x);
+void delay(int x);
 
 #endif /* utility_h */

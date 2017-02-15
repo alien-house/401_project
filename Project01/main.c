@@ -36,35 +36,33 @@ struct studentcourse {
     char * courseID;
     short mark;
 };
-void enterLogin(void);
-void showLoginView(void);
 void makeAccountStructure(char file_name[]);
 void makeCourseStructure(char file_name[]);
 void makeStudentStructure(char file_name[]);
 void makeStuCourseStructure(char file_name[]);
+int mainMenu();
+void enterLogin(void);
+void showLoginView(void);
+void options(int opt);
+void resetData(void);
+void loginfailed(void);
 void showPrintMyCourse(void);
 void showPrintMyTranscript(void);
 void showPrintAllStudents(void);
 void showPrintAllCourses(void);
-void stageRanking(void);
-char ** getCourseName(char ** courseID, int courseTotalNum, int transcript);
+void stageRanking(void);void printCourses();
 
+char **getCourseName(char ** courseID, int courseTotalNum, int transcript);
 int getStuStrIndex(int studentID);
+float * calculateAllGPA();
 float calculateGPA(int myStudentID);
 int calculateRank(int myStudentID);
-void printCourses();
 void getGender(char * sex);
-void resetData(void);
-void loginfailed(void);
-
-void mainMenu();
-float * calculateAllGPA();
 
 #define MAXUSER 256
-#define MAXTEXT 50
 #define N 256
 
-# define FILE_ACCOUNT "/Users/shinji/Mydata/personalmarketing/english/canada/school/CICCC/subject/401/Project01/Project01/Project01/Accounts.txt"
+#define FILE_ACCOUNT "/Users/shinji/Mydata/personalmarketing/english/canada/school/CICCC/subject/401/Project01/Project01/Project01/Accounts.txt"
 #define FILE_COURSE "/Users/shinji/Mydata/personalmarketing/english/canada/school/CICCC/subject/401/Project01/Project01/Project01/Courses.txt"
 #define FILE_STUDENT "/Users/shinji/Mydata/personalmarketing/english/canada/school/CICCC/subject/401/Project01/Project01/Project01/Students.txt"
 #define FILE_STUCOURSE "/Users/shinji/Mydata/personalmarketing/english/canada/school/CICCC/subject/401/Project01/Project01/Project01/StudentsCourses.txt"
@@ -75,7 +73,7 @@ struct student * Student;
 struct studentcourse * StudentCourse;
 
 int myStudentID     = 0;
-int myStuStrIndex     = 0;
+int myStuStrIndex   = 0;
 int myRank          = 0;
 float myGpa         = 0.0;
 int numCourses      = 0;
@@ -90,7 +88,6 @@ int stuCourseMaxNum = 0;
 int noInfo          = 0;
 
 int main(int argc, const char * argv[]) {
-    
     
     char file_account[]         = FILE_ACCOUNT;
     char file_course[]          = FILE_COURSE;
@@ -107,7 +104,6 @@ int main(int argc, const char * argv[]) {
     makeStudentStructure(file_student);
     makeStuCourseStructure(file_studentscourses);
     
-    // realloc each exact numbers
     Account       = (struct account * ) realloc(Account, sizeof(struct account) * accountMaxNum);
     Course        = (struct course * ) realloc(Course, sizeof(struct course) * courseMaxNum);
     Student       = (struct student * ) realloc(Student, sizeof(struct student) * studentMaxNum);
@@ -119,132 +115,11 @@ int main(int argc, const char * argv[]) {
     
 }
 
-
-/* ====================================== */
-/* MAKING STRUCTURE                       */
-/* ====================================== */
-
-// Account
-void makeAccountStructure(char file_name[]) {
-    
-    int num = 0;
-    char ** dataArray = loadFile(file_name, &num);
-    accountMaxNum = num / 2;
-    int j = 0;
-    for (int i = 0; i < accountMaxNum; i++) {
-        if ((strstr(dataArray[j], "User")) != NULL) {
-            Account[i] = * (struct account * ) malloc(sizeof(struct account));
-            Account[i].user = atoi(substring(dataArray[j], 0));
-            j++;
-        }
-        if ((strstr(dataArray[j], "Pass")) != NULL) {
-            Account[i].pass = substring(dataArray[j], 0);
-            j++;
-        }
-    }
-    free(dataArray);
-    
-}
-
-// Course
-void makeCourseStructure(char file_name[]) {
-    
-    int num = 0;
-    char ** dataArray = loadFile(file_name, &num);
-    courseMaxNum = num / 2;
-    int j = 0;
-    for (int i = 0; i < courseMaxNum; i++) {
-        if ((strstr(dataArray[j], "courseID")) != NULL) {
-            Course[i] = * (struct course * ) malloc(sizeof(struct course));
-            Course[i].courseID = substring(dataArray[j], 0);
-            j++;
-        }
-        if ((strstr(dataArray[j], "name")) != NULL) {
-            Course[i].name = substring(dataArray[j], 0);
-            //            printf(":%s\n",Course[i].name);
-            j++;
-        }
-    }
-    free(dataArray);
-    
-}
-
-// Student
-void makeStudentStructure(char file_name[]) {
-    
-    int num = 0;
-    char ** dataArray = loadFile(file_name, &num);
-    studentMaxNum = num / 7;
-    int j = 0;
-    for (int i = 0; i < studentMaxNum; i++) {
-        if ((strstr(dataArray[j], "studentID")) != NULL) {
-            Student[i] = * (struct student * ) malloc(sizeof(struct student));
-            Student[i].studentID = atoi(substring(dataArray[j], 0));
-            j++;
-        }
-        if ((strstr(dataArray[j], "name")) != NULL) {
-            Student[i].name = substring(dataArray[j], 0);
-            j++;
-        }
-        if ((strstr(dataArray[j], "gender")) != NULL) {
-            Student[i].gender = substring(dataArray[j], 0);
-            j++;
-        }
-        if ((strstr(dataArray[j], "grade")) != NULL) {
-            Student[i].grade = atoi(substring(dataArray[j], 0));
-            j++;
-        }
-        if ((strstr(dataArray[j], "address")) != NULL) {
-            Student[i].address = substring(dataArray[j], 0);
-            j++;
-        }
-        if ((strstr(dataArray[j], "admission_year")) != NULL) {
-            Student[i].admission_year = (short) atoi(substring(dataArray[j], 0));
-            j++;
-        }
-        if ((strstr(dataArray[j], "courses")) != NULL) {
-            int courseNum = 0;
-            Student[i].courses = dividedDataCourses(substring(dataArray[j], 1), & courseNum);
-            Student[i].courses_num = courseNum;
-            j++;
-        }
-    }
-    free(dataArray);
-    
-}
-
-// Student Course
-void makeStuCourseStructure(char file_name[]) {
-    
-    int num = 0;
-    char ** dataArray = loadFile(file_name, &num);
-    stuCourseMaxNum = num / 3;
-    int j = 0;
-    for (int i = 0; i < stuCourseMaxNum; i++) {
-        if ((strstr(dataArray[j], "studentID")) != NULL) {
-            StudentCourse[i] = * (struct studentcourse * ) malloc(sizeof(struct studentcourse));
-            StudentCourse[i].studentID = atoi(substring(dataArray[j], 0));
-            j++;
-        }
-        if ((strstr(dataArray[j], "courseID")) != NULL) {
-            StudentCourse[i].courseID = substring(dataArray[j], 0);
-            j++;
-        }
-        if ((strstr(dataArray[j], "mark")) != NULL) {
-            StudentCourse[i].mark = atoi(substring(dataArray[j], 0));
-            j++;
-        }
-    }
-    free(dataArray);
-    
-    
-}
-
-
 /* ====================================== */
 /* LOGIN                                  */
 /* ====================================== */
 void showLoginView(void) {
+    
     printf("************************************************************\n");
     printf("Please enter your account to login:\n");
     printf("************************************************************\n");
@@ -266,6 +141,7 @@ void enterLogin(void) {
             myStudentID = inputUsername;
             myAccStrIndex = i;
             myStuStrIndex = getStuStrIndex(myStudentID);
+            
             break;
         }
     }
@@ -279,7 +155,11 @@ void enterLogin(void) {
             delay(2000);
             myGpa = calculateGPA(myStudentID);
             getGender(Student[myStuStrIndex].gender);
-            mainMenu();
+            int optnum = 0;
+            while ((optnum = mainMenu()) != 0) {
+                options(optnum);
+            }
+            
         } else {
             loginfailed();
         }
@@ -301,118 +181,135 @@ void loginfailed(void) {
 /* ====================================== */
 /* MAIN MENU                              */
 /* ====================================== */
-void mainMenu() {
-    int repeater = 0;
-    int opt;
-    while (repeater == 0) {
-        printf("************************************************************\n");
-        printf("Select from the options:\n");
-        printf("************************************************************\n");
-        printf("¬[1] Print my enrollment certificate\n");
-        printf("¬[2] Print my courses\n");
-        printf("¬[3] Print my transcript\n");
-        printf("¬[4] Print my GPA\n");
-        printf("¬[5] Print my ranking among all students in the college\n");
-        printf("¬[6] List of all available courses\n");
-        printf("¬[7] List of all students\n");
-        printf("¬[8] Logout\n");
-        printf("¬[9] Exit\n");
-        printf("************************************************************\n");
-        printf("Enter the number corresponding to each item to proceed:\n");
-        
-        scanf("%d", &opt);
-        
-        switch (opt) {
-            case 1: // my enrollment certificate
-                if (noInfo == 1)
-                    printf("You are not enrolled in any classes in CICCC\n\n");
-                else
-                    printf("Dear Sir/Madam,\n\nThis is to certify that %s. %s with student id %d is a student at grade %d at CICCC. %s was admited to our college in %hd and has taken %d course(s). Currently %s resides at %s\n\n",
-                           GenderTitle,
-                           Student[myStuStrIndex].name,
-                           myStudentID, Student[myStuStrIndex].grade,
-                           convertFirstCapital(GenderFirstPerson),
-                           Student[myStuStrIndex].admission_year,
-                           Student[myStuStrIndex].courses_num,
-                           GenderFirstPerson,
-                           Student[myStuStrIndex].address);
-                printf("If you have any questions, please do not hesitate to contact us.\n\n");
-                delay(2000);
-                break;
-            case 2: // my courses
-                if (noInfo == 1)
-                    printf("You are not enrolled in any classes in CICCC\n\n");
-                else{
-                    printf("Hi %s. %s has taken the following courses:\n", GenderTitle, Student[myStuStrIndex].name);
-                    showPrintMyCourse();
-                }
-                delay(2000);
-                break;
-            case 3: // my transcript
-                if (noInfo == 1)
-                    printf("You are not enrolled in any classes in CICCC\n\n");
-                else{
-                    printf("Hi %s. %s,\n", GenderTitle, Student[myStuStrIndex].name);
-                    printf("Here is your transcript:\n\n");
-                    showPrintMyTranscript();
-                    printf("Your GPA is: %.2f\n\n", myGpa);
-                }
-                delay(2000);
-                break;
-            case 4: // my GPA
-                if (noInfo == 1)
-                    printf("You are not enrolled in any classes in CICCC\n\n");
-                else{
-                    printf("Hi %s. %s,\n", GenderTitle, Student[myStuStrIndex].name);
-                    printf("Your GPA is: %.2f\n\n", myGpa);
-                }
-                delay(2000);
-                break;
-            case 5: // my ranking
-                if (noInfo == 1)
-                    printf("You are not enrolled in any classes in CICCC\n\n");
-                else{
-                    printf("Hi %s. %s,\n", GenderTitle, Student[myStuStrIndex].name);
-                    stageRanking();
-                    printf("Your GPA is:%.2f and therefore your rank is %d\n\n", myGpa, myRank);
-                }
-                delay(2000);
-                break;
-            case 6: // all courses
-                printf("The following courses are offered in CICCC:\n");
-                showPrintAllCourses();
-                delay(2000);
-                break;
-            case 7: // all students
-                printf("There are %d students in CICCC as following:\n", studentMaxNum);
-                showPrintAllStudents();
-                delay(2000);
-                break;
-            case 8:
-                printf("Logging out...\n");
-                resetData();
-                delay(2000);
-                repeater = 1;
-                break;
-            case 9:
-                free(Account);
-                free(Course);
-                free(Student);
-                free(StudentCourse);
-                printf("Thank you for using our program!\n");
-                delay(3000);
-                exit(1);
-                break;
-            default:
-                printf("Wrong Option, please try again!\n");
+int mainMenu(){
+    int opt = 0;
+    
+    printf("************************************************************\n");
+    printf("Select from the options:\n");
+    printf("************************************************************\n");
+    printf("¬[1] Print my enrollment certificate\n");
+    printf("¬[2] Print my courses\n");
+    printf("¬[3] Print my transcript\n");
+    printf("¬[4] Print my GPA\n");
+    printf("¬[5] Print my ranking among all students in the college\n");
+    printf("¬[6] List of all available courses\n");
+    printf("¬[7] List of all students\n");
+    printf("¬[8] Logout\n");
+    printf("¬[9] Exit\n");
+    printf("************************************************************\n");
+    printf("Enter the number corresponding to each item to proceed:\n");
+    
+    if (scanf("%d", &opt) != 1){ // get number of variable from inputting user
+        scanf("%*s");// read empty text on purpose
+        if(feof(stdin)){ // check the terminator
+            printf("ERROR!");
         }
     }
     
-    if (repeater == 1) {
-        delay(3000);
-        showLoginView();
+    if(!(opt > 0 && opt < 10)){
+        opt = 99;// if its not 1 to 9, assign
     }
+    
+    return opt;
+    
 }
+
+
+void options(int opt){
+    switch (opt) {
+        case 1: // my enrollment certificate
+            if (noInfo == 1)
+                printf("You are not enrolled in any classes in CICCC\n\n");
+            else
+                printf("Dear Sir/Madam,\n\nThis is to certify that %s. %s with student id %d is a student at grade %d at CICCC. %s was admited to our college in %hd and has taken %d course(s). Currently %s resides at %s\n\n",
+                       GenderTitle,
+                       Student[myStuStrIndex].name,
+                       myStudentID, Student[myStuStrIndex].grade,
+                       convertFirstCapital(GenderFirstPerson),
+                       Student[myStuStrIndex].admission_year,
+                       Student[myStuStrIndex].courses_num,
+                       GenderFirstPerson,
+                       Student[myStuStrIndex].address);
+            printf("If you have any questions, please do not hesitate to contact us.\n\n");
+            delay(2000);
+            break;
+        case 2: // my courses
+            if (noInfo == 1)
+                printf("You are not enrolled in any classes in CICCC\n\n");
+            else{
+                printf("Hi %s. %s has taken the following courses:\n", GenderTitle, Student[myStuStrIndex].name);
+                showPrintMyCourse();
+            }
+            delay(2000);
+            break;
+        case 3: // my transcript
+            if (noInfo == 1)
+                printf("You are not enrolled in any classes in CICCC\n\n");
+            else{
+                printf("Hi %s. %s,\n", GenderTitle, Student[myStuStrIndex].name);
+                printf("Here is your transcript:\n\n");
+                showPrintMyTranscript();
+                printf("Your GPA is: %.2f\n\n", myGpa);
+            }
+            delay(2000);
+            break;
+        case 4: // my GPA
+            if (noInfo == 1)
+                printf("You are not enrolled in any classes in CICCC\n\n");
+            else{
+                printf("Hi %s. %s,\n", GenderTitle, Student[myStuStrIndex].name);
+                printf("Your GPA is: %.2f\n\n", myGpa);
+            }
+            delay(2000);
+            break;
+        case 5: // my ranking
+            if (noInfo == 1)
+                printf("You are not enrolled in any classes in CICCC\n\n");
+            else{
+                printf("Hi %s. %s,\n", GenderTitle, Student[myStuStrIndex].name);
+                stageRanking();
+                printf("Your GPA is:%.2f and therefore your rank is %d\n\n", myGpa, myRank);
+            }
+            delay(2000);
+            break;
+        case 6: // all courses
+            printf("The following courses are offered in CICCC:\n");
+            showPrintAllCourses();
+            delay(2000);
+            break;
+        case 7: // all students
+            printf("There are %d students in CICCC as following:\n", studentMaxNum);
+            showPrintAllStudents();
+            delay(2000);
+            break;
+        case 8:
+            printf("Logging out...\n");
+            resetData();
+            delay(3000);
+            showLoginView();
+            break;
+        case 9:
+            free(Account);
+            free(Course);
+            free(Student);
+            free(StudentCourse);
+            // free is needed for inside of arrays.
+            printf("Thank you for using our program!\n");
+            delay(3000);
+            exit(1);
+            break;
+        case 99:
+            printf("Wrong Option, choose a number between 1 and 9!\n");
+            break;
+        default:
+            printf("Wrong Option, please try again!\n");
+//            mainMenu();
+            break;
+    }
+    
+    
+}
+
 
 void resetData(void) {
     myStudentID       = 0;
@@ -466,14 +363,16 @@ void stageRanking(void) {
     bubbleSort(allGPAArray, num);
     
     for (int i = 0; i < num; i++) {
+//        printf("%.2f\n",allGPAArray[i]);
         if (allGPAArray[i] == myGpa) {
             myRank = i + 1;
+            break;
         }
     }
     free(allGPAArray);
 }
 
-float * calculateAllGPA() {
+float * calculateAllGPA(void) {
     float * markArray = (float * ) malloc(sizeof(float * ) * studentMaxNum);
     float temNum = 0;
     int temIndex = 0;
@@ -489,6 +388,7 @@ float * calculateAllGPA() {
         }
         temIndex     = temIndex;
         markArray[i] = temNum / temIndex;
+        // needed init
         temNum       = 0;
         temIndex     = 0;
     }
@@ -498,16 +398,6 @@ float * calculateAllGPA() {
 /* ====================================== */
 /* [OPTION 6] List of all courses         */
 /* ====================================== */
-void showPrintAllStudents(void) {
-    for (int i = 0; i < studentMaxNum; i++) {
-        printf("%d) %s: %d \n", i + 1, Student[i].name, Student[i].studentID);
-    }
-    printf("\n");
-}
-
-/* ====================================== */
-/* [OPTION 7] List of all students        */
-/* ====================================== */
 void showPrintAllCourses(void) {
     for (int i = 0; i < courseMaxNum; i++) {
         printf("%d) %s: %s \n", i + 1, Course[i].courseID, Course[i].name);
@@ -515,6 +405,15 @@ void showPrintAllCourses(void) {
     printf("\n");
 }
 
+/* ====================================== */
+/* [OPTION 7] List of all students        */
+/* ====================================== */
+void showPrintAllStudents(void) {
+    for (int i = 0; i < studentMaxNum; i++) {
+        printf("%d) %s: %d \n", i + 1, Student[i].name, Student[i].studentID);
+    }
+    printf("\n");
+}
 
 /* ====================================== */
 /* Get course name User is taking
@@ -633,6 +532,128 @@ void getGender(char * sex) {
         GenderTitle = "Mrs";
         GenderFirstPerson = "she";
     }
+    
+}
+
+
+
+/* ====================================== */
+/* MAKING STRUCTURE                       */
+/* ====================================== */
+
+// Account
+void makeAccountStructure(char file_name[]) {
+    
+    int num = 0;
+    char ** dataArray = loadFile(file_name, &num);
+    accountMaxNum = num / 2;
+    int j = 0;
+    for (int i = 0; i < accountMaxNum; i++) {
+        if ((strstr(dataArray[j], "User")) != NULL) {
+            Account[i] = * (struct account * ) malloc(sizeof(struct account));
+            Account[i].user = atoi(substring(dataArray[j], 0));
+            j++;
+        }
+        if ((strstr(dataArray[j], "Pass")) != NULL) {
+            Account[i].pass = substring(dataArray[j], 0);
+            j++;
+        }
+    }
+    free(dataArray);
+    
+}
+
+// Course
+void makeCourseStructure(char file_name[]) {
+    
+    int num = 0;
+    char ** dataArray = loadFile(file_name, &num);
+    courseMaxNum = num / 2;
+    int j = 0;
+    for (int i = 0; i < courseMaxNum; i++) {
+        if ((strstr(dataArray[j], "courseID")) != NULL) {
+            Course[i] = * (struct course * ) malloc(sizeof(struct course));
+            Course[i].courseID = substring(dataArray[j], 0);
+            j++;
+        }
+        if ((strstr(dataArray[j], "name")) != NULL) {
+            Course[i].name = substring(dataArray[j], 0);
+            //            printf(":%s\n",Course[i].name);
+            j++;
+        }
+    }
+    free(dataArray);
+    
+}
+
+// Student
+void makeStudentStructure(char file_name[]) {
+    
+    int num = 0;
+    char ** dataArray = loadFile(file_name, &num);
+    studentMaxNum = num / 7;
+    int j = 0;
+    for (int i = 0; i < studentMaxNum; i++) {
+        if ((strstr(dataArray[j], "studentID")) != NULL) {
+            Student[i] = * (struct student * ) malloc(sizeof(struct student));
+            Student[i].studentID = atoi(substring(dataArray[j], 0));
+            j++;
+        }
+        if ((strstr(dataArray[j], "name")) != NULL) {
+            Student[i].name = substring(dataArray[j], 0);
+            j++;
+        }
+        if ((strstr(dataArray[j], "gender")) != NULL) {
+            Student[i].gender = substring(dataArray[j], 0);
+            j++;
+        }
+        if ((strstr(dataArray[j], "grade")) != NULL) {
+            Student[i].grade = atoi(substring(dataArray[j], 0));
+            j++;
+        }
+        if ((strstr(dataArray[j], "address")) != NULL) {
+            Student[i].address = substring(dataArray[j], 0);
+            j++;
+        }
+        if ((strstr(dataArray[j], "admission_year")) != NULL) {
+            Student[i].admission_year = (short) atoi(substring(dataArray[j], 0));
+            j++;
+        }
+        if ((strstr(dataArray[j], "courses")) != NULL) {
+            int courseNum = 0;
+            Student[i].courses = dividedDataCourses(substring(dataArray[j], 1), &courseNum);
+            Student[i].courses_num = courseNum;
+            j++;
+        }
+    }
+    free(dataArray);
+    
+}
+
+// Student Course
+void makeStuCourseStructure(char file_name[]) {
+    
+    int num = 0;
+    char ** dataArray = loadFile(file_name, &num);
+    stuCourseMaxNum = num / 3;
+    int j = 0;
+    for (int i = 0; i < stuCourseMaxNum; i++) {
+        if ((strstr(dataArray[j], "studentID")) != NULL) {
+            StudentCourse[i] = * (struct studentcourse * ) malloc(sizeof(struct studentcourse));
+            StudentCourse[i].studentID = atoi(substring(dataArray[j], 0));
+            j++;
+        }
+        if ((strstr(dataArray[j], "courseID")) != NULL) {
+            StudentCourse[i].courseID = substring(dataArray[j], 0);
+            j++;
+        }
+        if ((strstr(dataArray[j], "mark")) != NULL) {
+            StudentCourse[i].mark = atoi(substring(dataArray[j], 0));
+            j++;
+        }
+    }
+    free(dataArray);
+    
     
 }
 

@@ -40,7 +40,6 @@ char ** dividedDataCourses(char * dataArray, int * courseNum) {
     
 }
 
-
 char * substring(char * word, int raw) {
     
     char * result;
@@ -80,7 +79,6 @@ char * substring(char * word, int raw) {
     
     return result;
 }
-
 
 char ** loadFile(char file_name[], int * num) {
     

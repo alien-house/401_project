@@ -9,21 +9,6 @@
 #include "utility.h"
 
 
-void bubbleSort(float * allGPAArray, int arrayLen) {
-    
-    float tmp;
-    for (int i = 0; i < arrayLen; i++) {
-        for (int j = arrayLen; j > i; j--) {
-            if (allGPAArray[j - 1] < allGPAArray[j]) {
-                tmp = allGPAArray[j];
-                allGPAArray[j] = allGPAArray[j - 1];
-                allGPAArray[j - 1] = tmp;
-            }
-        }
-    }
-    
-}
-
 int strlength(char * line) {
     int len = (int) strlen(line);
     return len;
@@ -41,7 +26,6 @@ int getArrayLen(char ** dataArray) {
     int size = sizeof dataArray / sizeof dataArray[0];
     return size;
 }
-
 
 char * convertFirstCapital(char * word) {
     char * tmp = NULL;
@@ -78,19 +62,22 @@ void trim(char * s) {
     }
 }
 
-//void delay(int x) {
-//    int c = 1, d = 1;
-//    for (c = 1; c <= x; c++)
-//        for (d = 1; d <= 200000; d++) {}
-//}
+void delay(int x) {
+    int c = 1, d = 1;
+    for (c = 1; c <= x; c++)
+        for (d = 1; d <= 200000; d++) {}
+}
 
-int delay(unsigned long x) {
-    clock_t  s = clock();
-    clock_t  c;
-    
-    do {
-        if ((c = clock()) == (clock_t)-1) 
-            return (0);
-    } while (1000UL * (c - s) / CLOCKS_PER_SEC <= x);
-    return (1);
+
+void bubbleSort(float * allGPAArray, int arrayLen) {
+    float tmp;
+    for (int i = 0; i < arrayLen; i++) {
+        for (int j = arrayLen; j > i; j--) {
+            if (allGPAArray[j - 1] < allGPAArray[j]) {
+                tmp = allGPAArray[j];
+                allGPAArray[j] = allGPAArray[j - 1];
+                allGPAArray[j - 1] = tmp;
+            }
+        }
+    }
 }
