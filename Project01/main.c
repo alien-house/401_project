@@ -119,7 +119,6 @@ int main(int argc, const char * argv[]) {
 /* LOGIN                                  */
 /* ====================================== */
 void showLoginView(void) {
-    
     printf("************************************************************\n");
     printf("Please enter your account to login:\n");
     printf("************************************************************\n");
@@ -155,6 +154,7 @@ void enterLogin(void) {
             delay(2000);
             myGpa = calculateGPA(myStudentID);
             getGender(Student[myStuStrIndex].gender);
+            //option menu
             int optnum = 0;
             while ((optnum = mainMenu()) != 0) {
                 options(optnum);
@@ -313,12 +313,12 @@ void options(int opt){
 
 void resetData(void) {
     myStudentID       = 0;
-    myStuStrIndex       = 0;
+    myStuStrIndex     = 0;
     myRank            = 0;
     GenderTitle       = '\0';
     GenderFirstPerson = '\0';
     myGpa             = 0.0;
-    numCourses = 0;
+    numCourses        = 0;
 }
 
 
@@ -327,9 +327,6 @@ void resetData(void) {
 /* ====================================== */
 void showPrintMyCourse(void) {
     char ** courseName;
-    //    printf("%s \n", Student[myStuStrIndex].courses[0]);
-    //    printf("%d \n", Student[myStuStrIndex].courses_num);
-    
     courseName = getCourseName(Student[myStuStrIndex].courses, Student[myStuStrIndex].courses_num, 0);
     for (int i = 0; i < Student[myStuStrIndex].courses_num; i++) {
         printf("%d) %s \n", i + 1, courseName[i]);
@@ -343,8 +340,6 @@ void showPrintMyCourse(void) {
 void showPrintMyTranscript(void) {
     char ** courseName;
     courseName = getCourseName(Student[myStuStrIndex].courses, Student[myStuStrIndex].courses_num, 1);
-    //    int nums = getArrayLength(courseName);
-    //    courseName = (char **) realloc(courseName, sizeof(char *) * nums);
     for (int i = 0; i < Student[myStuStrIndex].courses_num; i++) {
         printf("%d) %s \n", i + 1, courseName[i]);
     }
@@ -363,7 +358,6 @@ void stageRanking(void) {
     bubbleSort(allGPAArray, num);
     
     for (int i = 0; i < num; i++) {
-//        printf("%.2f\n",allGPAArray[i]);
         if (allGPAArray[i] == myGpa) {
             myRank = i + 1;
             break;

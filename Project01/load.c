@@ -32,7 +32,8 @@ char ** dividedDataCourses(char * dataArray, int * courseNum) {
             count++;
         }
         j++;
-    } * courseNum = index;
+    }
+    * courseNum = index;
     array = (char ** ) realloc(array, sizeof(char * ) * index);
     
     free(dataArray);
