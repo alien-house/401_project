@@ -303,10 +303,8 @@ void options(int opt){
             break;
         default:
             printf("Wrong Option, please try again!\n");
-//            mainMenu();
             break;
     }
-    
     
 }
 
@@ -411,6 +409,8 @@ void showPrintAllStudents(void) {
 
 /* ====================================== */
 /* Get course name User is taking
+ courseID       : courses:"MADP101","MADP202","MADP302","MADP401"
+ courseTotalNum : 4
  transcript = 0 : just name,
  transcript = 1 : showing mark    */
 /* ====================================== */
